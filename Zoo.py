@@ -25,7 +25,7 @@ class Zoo(): #Объявление класса Зоопарк
     
     def expenditure(self, price):
         self.price = price
-        if self.budget > 0:
+        if self.budget > price:
             self.budget -= price
         else:
             print('Недостаточно средств. Откройте зоопарк для посетителей, чтобы заработать монеты.')    
@@ -61,7 +61,7 @@ class Money():
                 
     def expenditure(self, price):
         self.price = price
-        if self.budget > 0:
+        if self.budget > price:
             self.budget -= price
         else:
             print('Недостаточно средств. Откройте зоопарк для посетителей, чтобы заработать монеты.')
@@ -134,6 +134,26 @@ class Cage(Zoo):
         
     def read_aqua(self):
         print('Количество аквариумов: '+ str(len(my_cage.list_aqua())))
+
+class Animals(Zoo):
+    
+   def __init__(self, kind_animals, price):
+      super().__init__()
+      self.kind_animals = kind_animals
+      self.price = price
+      
+   def update_list_animals(self, kind_animals):
+       self.list_animals.append(kind_animals)
+       return self.list_animals
+   
+   def read_list_animals(self):
+       
+       print('Список ваших животных:')
+       i = 1
+       for animal in self.list_animals:
+           i += 1
+           print(str(i) +'. '+ str(animal))
+
         
 my_cage = Cage('Клетка')
 my_visitors = Visitors()
@@ -182,7 +202,49 @@ while True:
                         
                     elif answer_3 == 3:
                         break   
+            elif answer_2 == 3:
+                choose = int(input('''Выберите животное, которое хотите купить: 
+                   1.Жираф - 50 монет 
+                   2.Коала - 90 монет
+                   3.Орел - 70 монет
+                   4.Дельфин - 75 монет
+                   5.Тигр - 85 монет
+                   '''))
+                   
+                giraffe = Animals('Жираф', 50)
+                coala = Animals('Коала', 90)
+                eagle = Animals('Орел', 70)
+                dolphin = Animals('Дельфин', 75)
+                tiger = Animals('Тигр', 85)
                 
+                while choose < 1 or choose > 5:
+                    print(input('Попробуйте еще раз! Выберите номер, соответсвующий функции. '))
+                if choose == 1:
+                    giraffe.update_list_animals('Жираф')
+                    my_money.expenditure(50)
+                    my_money.read_budget()
+                    giraffe.read_list_animals()
+                if choose == 2:
+                    coala.update_list_animals('Коала')
+                    my_money.expenditure(90)
+                    my_money.read_budget()
+                    coala.read_list_animals()
+                if choose == 3:
+                    eagle.update_list_animals('Орёл')
+                    my_money.expenditure(70)
+                    my_money.read_budget()
+                    eagle.read_list_animals()
+                if choose == 4:
+                    dolphin.update_list_animals('Дельфин')
+                    my_money.expenditure(75)
+                    my_money.read_budget()
+                    dolphin.update_list_animals()
+                if choose == 5:
+                    tiger.update_list_animals('Тигр')
+                    my_money.expenditure(85)
+                    my_money.read_budget()
+                    tiger.update_list_animals()
+                    
             elif answer_2 == 4:
                 while answer_3 != 5:
                     answer_3 = int(input('''
@@ -213,7 +275,3 @@ while True:
              break
         elif answer == 5:
             print()
-
-
-
-
