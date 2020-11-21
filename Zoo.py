@@ -3,38 +3,91 @@
 from random import randint
 
 class Zoo(): #Объявление класса Зоопарк
-    def __init__(self, budget = 20, rating = 1, count_v = randint(1,5)):
+    def __init__(self, count_v = randint(1,5)):
         #Здесь записываются все те переменные, которые будут доступны всем остальным наследуемым классам 
-        self.land_animals = ['Жираф'] #Список отдельно для сухопутных животных, которые есть у игрока (список будет пополняться за счёт покупок в магазине)
-        self.sea_animals = [] #Список отделно для морских животных, которые есть у игрока (список будет пополняться за счёт покупок в магазине)
+        self.list_animals = ['Жираф'] #Список отдельно для сухопутных животных, которые есть у игрока (список будет пополняться за счёт покупок в магазине)
         self.cages = ['Клетка'] #Список вольеров для сухопутных, которые есть у игрока (животное нельзя купить, пока кол-во клеток будет меньше числа животных)
         self.aquariums = [] #Список вольеров отдельно для морских животных
-        self.budget = budget #Переменная, определяющая начальный капитал зоопарка, будет изменяться за счет покупок в магазине и продажи билетов
-        self.rating = rating #Переменная, определяющая рейтинг зоопарка (увеличивается за счет привлекательности покупаемых животных и украшений)
+        self.budget = 20 #Переменная, определяющая начальный капитал зоопарка, будет изменяться за счет покупок в магазине и продажи билетов
         self.count_v = count_v
-'''
+    
+    def income(self, price):
+        self.price = price
+        list_of_ages = [] #Список возрастов посетителей в группе 
+        for age in range(self.count_v): #Цикл перебирает каждого посетителя в группе
+            age = randint(1, 100) #Запись в переменную age случайный возраст посетителя
+            list_of_ages.append(age) #Запись в список list_of_ages возраст каждого посетителя
+        for age in list_of_ages: #Определение цены билета для покупателей
+            if age < 6: #Если посетителю < 6, цена билета = 0
+                continue 
+            else:
+                self.budget += self.price #Прибавление дохода от продаж билетов
+    
+    def expenditure(self, price):
+        self.price = price
+        if self.budget > 0:
+            self.budget -= price
+        else:
+            print('Недостаточно средств. Откройте зоопарк для посетителей, чтобы заработать монеты.')    
+    
+    
+''' available 
 Все остальные классы должны наследовать переменные класса Зоопарк, 
 чтобы при покупках в магазине или при продаже билетов, их можно было изменять
-'''   
+'''
+   
+class Money():
+    
+    def __init__(self, budget = 20):
+        self.budget = budget
+        self.count_v = 0
+        self.budget = 20
+    
+    def update_count_v(self):
+        self.count_v = randint(1,5)
+        return self.count_v
+        
+    def income(self, price):
+        self.price = price
+        list_of_ages = [] #Список возрастов посетителей в группе 
+        for age in range(self.count_v): #Цикл перебирает каждого посетителя в группе
+            age = randint(1, 100) #Запись в переменную age случайный возраст посетителя
+            list_of_ages.append(age) #Запись в список list_of_ages возраст каждого посетителя
+        for age in list_of_ages: #Определение цены билета для покупателей
+            if age < 6: #Если посетителю < 6, цена билета = 0
+                continue 
+            else:
+                self.budget += self.price
+                
+    def expenditure(self, price):
+        self.price = price
+        if self.budget > 0:
+            self.budget -= price
+        else:
+            print('Недостаточно средств. Откройте зоопарк для посетителей, чтобы заработать монеты.')
+    
+    def read_budget(self):
+        print('Ваши монеты: ', self.budget)
+
 
 class Visitors(Zoo): #Объявление класса посетителей 
     
     def __init__(self):
-        super().__init__(budget = 20, rating = 1)
-        self.count_v = 0 #Запись в переменную count_v случайного целого числа посетителей в группе
-           
-    def count_visitors(self): #Метод, определяющий количество посетителей за один раз работы зоопрка
-                              #Чем выше рейтинг, тем больше посетителей может прийти в зоопарк
-        if self.rating < 3:
-            self.count_v = randint(1, 2)
-            
-        elif self.rating < 5:
-            self.count_v = randint(1, 3)
-            
-        elif self.rating > 5:
-            self.count_v = randint(1, 5)
-
-
+        super().__init__(count_v = 0)
+        self.count_v = 0
+        self.budget = 20
+    
+    def update_count_v(self):
+        self.count_v = randint(1,5)
+    
+    def read_count_visitors(self):        
+        #print('Количество посетителей за сегодня: '+ str(self.count_v()))
+        return self.count_v
+    
+    def read_income(self):
+        #print('Ваши монеты: ' + str(self.budget))
+        return self.budget
+       
     def income_from_visit(self):
         list_of_ages = [] #Список возрастов посетителей в группе 
         for age in range(self.count_v): #Цикл перебирает каждого посетителя в группе
@@ -43,19 +96,14 @@ class Visitors(Zoo): #Объявление класса посетителей
         for age in list_of_ages: #Определение цены билета для покупателей
             if age < 6: #Если посетителю < 6, цена билета = 0
                 continue 
-            else: #Иначе цена 
-                self.budget += 5 #Прибавление дохода от продаж билетов
+            else:
+                self.budget += 5 #Прибавление дохода от продаж билетов  
     
-    def read_count_visitors(self):        
-        print('Количество посетителей за сегодня: '+ str(self.count_v()))
-        
-    def read_income(self):
-        print('Ваши монеты: ' + str(self.budget))
         
 class Cage(Zoo):
     
     def __init__(self, kind_cage):
-        super().__init__(budget = 20)
+        super().__init__()
         self.kind_cage = kind_cage
         
     def price_cage(self, price):
@@ -88,9 +136,10 @@ class Cage(Zoo):
         print('Количество аквариумов: '+ str(len(my_cage.list_aqua())))
         
 my_cage = Cage('Клетка')
+my_visitors = Visitors()
+my_money = Money()
 
 while True:
-        my_visitors = Visitors()        
         answer = int(input('''
               \n Добро пожаловать в зоопарк!
               \n Что вы хотите сделать ? (Выберите номер функции)
@@ -121,15 +170,15 @@ while True:
                                          \n 2. Аквариум
                                          \n 3. Назад
                                          '''))
-                    if answer_3 == 1:
+                    if answer_3 == 1:                        
                         my_cage.read_cage()
-                        my_cage.price_cage(10)
-                        my_cage.read_budget()
+                        my_money.expenditure(10)
+                        my_money.read_budget()
                         
                     elif answer_3 == 2:
                         my_cage.read_aqua()
-                        my_cage.price_cage(10)
-                        my_cage.read_budget()
+                        my_money.expenditure(10)
+                        my_money.read_budget()
                         
                     elif answer_3 == 3:
                         break   
@@ -148,11 +197,11 @@ while True:
                 break
                 
         elif answer == 2:
-            '''Зоопарк работает... приходят посетители'''
-            my_visitors.count_visitors()
-            my_visitors.income_from_visit()
-            my_visitors.read_count_visitors()
-            my_visitors.read_income()
+            '''Зоопарк работает, приходят посетители'''
+            
+            print('Кол-во посетителей за сегодня: ', str(my_money.update_count_v()))
+            my_money.income(5)
+            my_money.read_budget()
         
         elif answer == 3:
             print('''Добро пожаловать в зоопарк! 
@@ -164,6 +213,7 @@ while True:
              break
         elif answer == 5:
             print()
+
 
 
 
