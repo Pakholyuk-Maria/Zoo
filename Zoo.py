@@ -338,3 +338,4 @@ while True:
         animals = Animals()
         animals.read_list_animals()
         print()
+
